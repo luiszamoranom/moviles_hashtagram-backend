@@ -6,7 +6,7 @@ CREATE TABLE usuario (
     nombre_usuario varchar(20) NOT NULL,
     descripcion varchar(100),
     email varchar(50) NOT NULL,
-    contrasena varchar(50) NOT NULL,
+    contrasena varchar(200) NOT NULL,
     foto_perfil TEXT,
     foto_extension varchar(4),
     habilitado BOOLEAN DEFAULT TRUE,
