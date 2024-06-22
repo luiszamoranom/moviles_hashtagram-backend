@@ -1,0 +1,24 @@
+### Obtener todos los hashtags
+GET http://localhost:9999/hashtag
+
+### Obtener hashtag por ID (reemplaza 1 con el ID existente)
+GET http://localhost:9999/hashtag/1
+
+### Crear un nuevo hashtag
+POST http://localhost:9999/hashtag
+Content-Type: application/json
+
+{
+  "etiqueta": "nuevo1"
+}
+
+### Actualizar un hashtag (reemplaza 1 con el ID existente)
+PUT http://localhost:9999/hashtag/1
+Content-Type: application/json
+
+{
+  "etiqueta": "nuevo2"
+}
+
+### Eliminar un hashtag (reemplaza 1 con el ID existente)
+DELETE http://localhost:9999/hashtag/1

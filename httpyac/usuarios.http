@@ -41,6 +41,14 @@ Content-Type: application/json
   "email": "nuevo.usuario@example.com"
 }
 
+### Actualizando sólo el email
+PUT http://localhost:9999/usuario/4
+Content-Type: application/json
+
+{
+  "habilitado": true
+}
+
 
 ### Actualizar información del usuario (ID 1)
 PUT http://localhost:9999/usuario/1

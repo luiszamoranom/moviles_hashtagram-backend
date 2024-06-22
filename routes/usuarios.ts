@@ -25,7 +25,7 @@ router.post('/registrar', async (req, res) => {
 
   const nombreUsuario = req.body.nombre_usuario;
   const email = req.body.email;
-
+  
   try {
     const existeUsuario = await prisma.usuario.findFirst({
       where: {
