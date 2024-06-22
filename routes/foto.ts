@@ -76,11 +76,14 @@ router.post('/subir', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const fotos = await prisma.foto.findMany({
+            orderBy: {
+                createAt: 'desc',
+            },
             include: {
                 propietario: {
                     select: {
                         id: true,
-                        nombreUsuario: true, // Puedes seleccionar otros campos del usuario si los necesitas
+                        nombreUsuario: true,
                     },
                 },
                 hashtags: {

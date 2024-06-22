@@ -14,26 +14,28 @@ model Usuario {
   descripcion    String?   @db.VarChar(100)
   email          String    @unique @db.VarChar(50)
   contrasena     String    @db.VarChar(200)
-  fotoPerfil     String?   @db.Text
+  fotoPerfil     String?
   fotoExtension  String?   @db.VarChar(4)
   habilitado     Boolean   @default(true)
   rol            String    @default("usuario") @db.VarChar(50)
-  createAt       DateTime  @default(now()) @db.Timestamptz
-  updatedAt      DateTime  @default(now()) @db.Timestamptz
+  createAt       DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime  @default(now()) @db.Timestamptz(6)
   fotos          Foto[]
   meGusta        MeGusta[]
 }
 
 model Foto {
   id            Int           @id @default(autoincrement())
-  propietario   Usuario       @relation(fields: [propietarioId], references: [id])
   propietarioId Int
   cantidad      Int           @default(0)
   descripcion   String        @db.VarChar(50)
   ubicacion     String        @db.VarChar(30)
   base64        String?
+  propietario   Usuario       @relation(fields: [propietarioId], references: [id])
   hashtags      HashtagFoto[]
   meGusta       MeGusta[]
+  createAt      DateTime      @default(now()) @db.Timestamptz
+  updatedAt     DateTime      @default(now()) @db.Timestamptz
 }
 
 model Hashtag {
@@ -44,20 +46,20 @@ model Hashtag {
 
 model HashtagFoto {
   id        Int     @id @default(autoincrement())
-  foto      Foto    @relation(fields: [fotoId], references: [id])
   fotoId    Int
-  hashtag   Hashtag @relation(fields: [hashtagId], references: [id])
   hashtagId Int
+  foto      Foto    @relation(fields: [fotoId], references: [id])
+  hashtag   Hashtag @relation(fields: [hashtagId], references: [id])
 
   @@unique([fotoId, hashtagId])
 }
 
 model MeGusta {
   id              Int     @id @default(autoincrement())
-  interactuador   Usuario @relation(fields: [interactuadorId], references: [id])
   interactuadorId Int
-  foto            Foto    @relation(fields: [fotoId], references: [id])
   fotoId          Int
+  foto            Foto    @relation(fields: [fotoId], references: [id])
+  interactuador   Usuario @relation(fields: [interactuadorId], references: [id])
 
   @@unique([interactuadorId, fotoId])
 }
