@@ -25,7 +25,7 @@ router.post('/registrar', async (req, res) => {
 
   const nombreUsuario = req.body.nombre_usuario;
   const email = req.body.email;
-  
+
   try {
     const existeUsuario = await prisma.usuario.findFirst({
       where: {
@@ -182,6 +182,40 @@ router.put('/:id', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error interno del servidor.' });
+  }
+});
+
+router.get('/informacion-con-fotos/:id', async (req, res) => {
+  const usuarioId = parseInt(req.params.id);
+
+  try {
+    const usuario = await prisma.usuario.findUnique({
+      where: { id: usuarioId },
+      include: {
+        fotos: {
+          include: {
+            hashtags: {
+              select: {
+                hashtag: {
+                  select: {
+                    etiqueta: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!usuario) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.json(usuario);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener el usuario' });
   }
 });
 

@@ -17,6 +17,9 @@ GET http://localhost:9999/usuario
 ### Obtener información del usuario (ID 1)
 GET http://localhost:9999/usuario/1
 
+### Obtener información del usuario [incluye fotos y estas sus respectivos #]
+GET http://localhost:9999/usuario/informacion-con-fotos/1
+
 ### Actualizando sólo el nombre
 PUT http://localhost:9999/usuario/1
 Content-Type: application/json
