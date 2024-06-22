@@ -38,7 +38,7 @@ model Foto {
 
 model Hashtag {
   id       Int           @id @default(autoincrement())
-  etiqueta String        @db.VarChar(10)
+  etiqueta String        @unique @db.VarChar(10)
   fotos    HashtagFoto[]
 }
 
