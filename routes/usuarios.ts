@@ -86,4 +86,103 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/:id', async (req, res) => {
+  const usuarioId = parseInt(req.params.id);
+
+  try {
+    const usuario = await prisma.usuario.findUnique({
+      where: { id: usuarioId },
+    });
+
+    if (!usuario) {
+      return res.status(404).set('x-mensaje', 'Usuario no encontrado').end();
+    }
+
+    return res.status(200).send(usuario);
+  } catch (error) {
+    console.error(error);
+    res.status(500).set('x-mensaje', 'Error interno del servidor.').end();
+  }
+});
+
+const schemaActualizarUsuario = Joi.object({
+  nombreCompleto: Joi.string().min(3).max(20),
+  nombreUsuario: Joi.string().min(3).max(20),
+  descripcion: Joi.string().max(100),
+  email: Joi.string().email().max(50),
+  contrasena_actual: Joi.string().min(5).max(20),
+  nueva_contrasena: Joi.string().min(5).max(20),
+  fotoPerfil: Joi.string().base64(),
+  fotoExtension: Joi.string().min(3).max(4),
+  habilitado: Joi.boolean(),
+});
+
+router.put('/:id', async (req, res) => {
+  const { error } = schemaActualizarUsuario.validate(req.body);
+  const usuarioId = parseInt(req.params.id);
+
+  if (error) {
+    return res.status(400).set('x-mensaje', error.details[0].message).end();
+  }
+
+  try {
+    const usuarioActual = await prisma.usuario.findUnique({ where: { id: usuarioId } });
+
+    if (!usuarioActual) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    if (req.body.email && req.body.email !== usuarioActual.email) {
+      const usuarioConEmail = await prisma.usuario.findUnique({ where: { email: req.body.email } });
+      if (usuarioConEmail) {
+        return res.status(409).json({ error: 'El email ya está en uso por otro usuario.' });
+      }
+    }
+
+    if (req.body.nombreUsuario && req.body.nombreUsuario !== usuarioActual.nombreUsuario) {
+      const usuarioConNombreUsuario = await prisma.usuario.findUnique({ where: { nombreUsuario: req.body.nombreUsuario } });
+      if (usuarioConNombreUsuario) {
+        return res.status(409).json({ error: 'El nombre_usuario ya está en uso por otro usuario.' });
+      }
+    }
+
+    if (req.body.contrasena_actual) {
+      const contrasenaValida = await bcrypt.compare(
+          req.body.contrasena_actual,
+          usuarioActual.contrasena
+      );
+
+      if (!contrasenaValida) {
+        return res.status(401).json({ error: 'Contraseña actual incorrecta' });
+      }
+    }
+
+    let nuevaContrasenaHasheada = usuarioActual.contrasena;
+    if (req.body.nueva_contrasena) {
+      nuevaContrasenaHasheada = await bcrypt.hash(req.body.nueva_contrasena, 10);
+    }
+
+    const usuarioActualizado = await prisma.usuario.update({
+      where: { id: usuarioId },
+      data: {
+        nombreCompleto: req.body.nombreCompleto || usuarioActual.nombreCompleto,
+        nombreUsuario: req.body.nombreUsuario || usuarioActual.nombreUsuario,
+        descripcion: req.body.descripcion || usuarioActual.descripcion,
+        email: req.body.email || usuarioActual.email,
+        contrasena: nuevaContrasenaHasheada,
+        fotoPerfil: req.body.fotoPerfil || usuarioActual.fotoPerfil,
+        fotoExtension: req.body.fotoExtension || usuarioActual.fotoExtension,
+        habilitado: req.body.habilitado ?? usuarioActual.habilitado,
+      },
+    });
+
+    return res
+        .status(200)
+        .json({ mensaje: 'Usuario actualizado éxitosamente', usuario: usuarioActualizado });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor.' });
+  }
+});
+
 export default router;

@@ -1,0 +1,70 @@
+### Registrar usuario
+POST http://localhost:9999/usuario/registrar
+Content-Type: application/json
+
+{
+  "email": "nuevo.usuario@example.com",
+  "nombre_completo": "Nuevo Usuario",
+  "nombre_usuario": "nuevo_usuario",
+  "contrasena": "contraseña123",
+  "imagen_base64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+  "imagen_tipo": "png"
+}
+
+### Obtener información usuarios
+GET http://localhost:9999/usuario
+
+### Obtener información del usuario (ID 1)
+GET http://localhost:9999/usuario/1
+
+### Actualizando sólo el nombre
+PUT http://localhost:9999/usuario/1
+Content-Type: application/json
+
+{
+  "nombreCompleto": "Usuario Actualizado"
+}
+
+### Actualizando sólo el nombre usuario
+PUT http://localhost:9999/usuario/4
+Content-Type: application/json
+
+{
+  "nombreUsuario": "nuevo_usuario3"
+}
+
+### Actualizando sólo el email
+PUT http://localhost:9999/usuario/4
+Content-Type: application/json
+
+{
+  "email": "nuevo.usuario@example.com"
+}
+
+
+### Actualizar información del usuario (ID 1)
+PUT http://localhost:9999/usuario/1
+Content-Type: application/json
+
+{
+  "nombreCompleto": "Usuario Actualizado",
+  "contrasena_actual": "contraseña123",
+  "nueva_contrasena": "contraseña456",
+  "descripcion": "Descripción actualizada"
+}
+
+### Actualizar información completa del usuario (ID 1)
+PUT http://localhost:9999/usuario/1
+Content-Type: application/json
+
+{
+  "nombreCompleto": "Usuario Actualizado",
+  "nombreUsuario": "usuario_actualizado",
+  "descripcion": "Descripción actualizada",
+  "email": "usuario.actualizado2@example.com",
+  "contrasena_actual": "contraseña458",
+  "nueva_contrasena": "contraseña458",
+  "fotoPerfil": "acTUALIZAdoKGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+  "fotoExtension": "jpg",
+  "habilitado": false
+}
