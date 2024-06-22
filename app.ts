@@ -6,6 +6,7 @@ import cors from 'cors'
 import usuarioRoute from './routes/usuarios';
 import identidadRoute from './routes/identidad'
 import hashtagRoute from './routes/hashtag'
+import fotoRoute from './routes/foto'
 
 export const app = express();
 const PORT = 9999
@@ -21,6 +22,7 @@ app.use(express.json({limit: '2mb'}));
 app.use("/usuario", usuarioRoute);
 app.use("/identidad", identidadRoute);
 app.use("/hashtag", hashtagRoute);
+app.use("/foto", fotoRoute);
 
 
 app.get("/ping", async (req, res) => {
