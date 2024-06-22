@@ -48,7 +48,6 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        // Verificar si ya existe un hashtag con la misma etiqueta
         const hashtagExistente = await prisma.hashtag.findUnique({
             where: { etiqueta: value.etiqueta },
         });
@@ -82,7 +81,6 @@ router.put('/:id', async (req, res) => {
     }
 
     try {
-        // Verificar si ya existe un hashtag con la misma etiqueta y diferente ID
         const hashtagExistente = await prisma.hashtag.findUnique({
             where: { etiqueta: value.etiqueta },
         });
@@ -115,6 +113,84 @@ router.delete('/:id', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error al eliminar el hashtag' });
+    }
+});
+
+router.get('/obtener-fotos/:etiqueta', async (req, res) => {
+    const hashtagEtiqueta = req.params.etiqueta;
+
+    try {
+        const hashtag = await prisma.hashtag.findUnique({
+            where: { etiqueta: hashtagEtiqueta },
+            include: {
+                fotos: {
+                    include: {
+                        foto: {
+                            include: {
+                                propietario: {
+                                    select: {
+                                        id: true,
+                                        nombreUsuario: true
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        if (!hashtag) {
+            return res.status(404).json({ error: 'No se encontraron fotos con ese hashtag' });
+        }
+
+        const fotosConHashtag = hashtag.fotos.map((hf) => hf.foto);
+
+        res.json(fotosConHashtag);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener las fotos' });
+    }
+});
+
+router.get('/obtener-fotos-por-mas-de-un-hashtag/:etiquetas', async (req, res) => {
+    const etiquetas = req.params.etiquetas.split(',');
+
+    try {
+        const fotos = await prisma.foto.findMany({
+            where: {
+                hashtags: {
+                    some: {
+                        hashtag: {
+                            etiqueta: {
+                                in: etiquetas,
+                            },
+                        },
+                    },
+                },
+            },
+            include: {
+                propietario: {
+                    select: {
+                        nombreUsuario: true,
+                    },
+                },
+                hashtags: {
+                    select: {
+                        hashtag: {
+                            select: {
+                                etiqueta: true,
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        res.json(fotos);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener las fotos' });
     }
 });
 

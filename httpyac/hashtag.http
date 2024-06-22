@@ -4,6 +4,12 @@ GET http://localhost:9999/hashtag
 ### Obtener hashtag por ID
 GET http://localhost:9999/hashtag/1
 
+### Obtener fotos de hashtag
+GET http://localhost:9999/hashtag/obtener-fotos/curico
+
+### Obtener fotos de que coincidan por más de un hashtag (debe cumplirlos todos)
+GET http://localhost:9999/hashtag/obtener-fotos-por-mas-de-un-hashtag/curico,colocolo
+
 ### Crear un nuevo hashtag
 POST http://localhost:9999/hashtag
 Content-Type: application/json
@@ -11,6 +17,7 @@ Content-Type: application/json
 {
   "etiqueta": "nuevo1"
 }
+
 
 ### Actualizar un hashtag
 PUT http://localhost:9999/hashtag/1

@@ -15,7 +15,7 @@ Content-Type: application/json
   ]
 }
 
-### Obtener todos los hashtags
+### Obtener todos las fotos
 GET http://localhost:9999/foto
 
 ### Obtener foto por ID
