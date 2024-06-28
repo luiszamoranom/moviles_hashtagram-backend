@@ -29,15 +29,22 @@ router.post('/login', async (req, res) => {
         nombreUsuario,
       },
       select: {
+        id: true,
+        nombreUsuario: true,
         rol: true,
         contrasena: true,
         habilitado: true,
       },
     });
 
+
+
+
     if (!usuarioRegistrado) {
       return res.status(404).set('x-mensaje', 'Usuario no existe.').end();
     }
+
+    const usuarioId: number = usuarioRegistrado.id
 
     if (!usuarioRegistrado.habilitado) {
       return res.status(401).set('x-mensaje', 'Usuario deshabilitado.').end();
@@ -66,7 +73,11 @@ router.post('/login', async (req, res) => {
     res
       .status(200)
       .set('x-message', 'Usuario autenticado.')
-      .send(accessToken)
+      .send({
+        usuarioId,
+        nombreUsuario,
+        accessToken
+      })
       .end();
   } catch (error) {
     console.error(error);
