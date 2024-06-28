@@ -84,6 +84,8 @@ router.get('/', async (req, res) => {
                     select: {
                         id: true,
                         nombreUsuario: true,
+                        fotoPerfil: true,
+                        fotoExtension: true
                     },
                 },
                 hashtags: {
