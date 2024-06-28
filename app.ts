@@ -17,7 +17,7 @@ const corsOptions = {
     credentials: true // incluir cookies, credenciales y certificados en el CORS
 };
 app.use(cors(corsOptions));
-app.use(express.json({limit: '2mb'}));
+app.use(express.json({limit: '100mb'}));
 
 app.use("/usuario", usuarioRoute);
 app.use("/identidad", identidadRoute);
