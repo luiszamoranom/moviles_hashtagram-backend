@@ -30,6 +30,7 @@ router.post('/login', async (req, res) => {
       },
       select: {
         id: true,
+        nombreCompleto: true,
         nombreUsuario: true,
         rol: true,
         contrasena: true,
@@ -45,6 +46,7 @@ router.post('/login', async (req, res) => {
     }
 
     const usuarioId: number = usuarioRegistrado.id
+    const nombreCompleto: string = usuarioRegistrado.nombreCompleto
 
     if (!usuarioRegistrado.habilitado) {
       return res.status(401).set('x-mensaje', 'Usuario deshabilitado.').end();
@@ -75,6 +77,7 @@ router.post('/login', async (req, res) => {
       .set('x-message', 'Usuario autenticado.')
       .send({
         usuarioId,
+        nombreCompleto,
         nombreUsuario,
         accessToken
       })
