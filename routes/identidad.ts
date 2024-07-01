@@ -35,6 +35,8 @@ router.post('/login', async (req, res) => {
         rol: true,
         contrasena: true,
         habilitado: true,
+        fotoPerfil: true,
+        fotoExtension: true
       },
     });
 
@@ -48,6 +50,8 @@ router.post('/login', async (req, res) => {
     const usuarioId: number = usuarioRegistrado.id
     const nombreCompleto: string = usuarioRegistrado.nombreCompleto
     const usuarioHabilitado: boolean = usuarioRegistrado.habilitado
+    const fotoPerfil = usuarioRegistrado.fotoPerfil
+    const fotoExtension = usuarioRegistrado.fotoExtension
 
 
     if (!usuarioRegistrado.habilitado) {
@@ -81,9 +85,9 @@ router.post('/login', async (req, res) => {
         usuarioId,
         nombreCompleto,
         nombreUsuario,
-        contrasena,
         usuarioRol,
-        usuarioHabilitado,
+        fotoPerfil,
+        fotoExtension,
         accessToken
       })
       .end();
