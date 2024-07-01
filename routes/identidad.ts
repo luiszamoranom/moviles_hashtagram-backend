@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
 
     const usuarioId: number = usuarioRegistrado.id
     const nombreCompleto: string = usuarioRegistrado.nombreCompleto
-    const habilitado: string = usuarioRegistrado.rol
+    const usuarioHabilitado: boolean = usuarioRegistrado.habilitado
 
 
     if (!usuarioRegistrado.habilitado) {
@@ -83,7 +83,7 @@ router.post('/login', async (req, res) => {
         nombreUsuario,
         contrasena,
         usuarioRol,
-        habilitado,
+        usuarioHabilitado,
         accessToken
       })
       .end();
